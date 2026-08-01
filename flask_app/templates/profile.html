@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile — SkillSpark</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/" class="logo">Skill<span>Spark</span></a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/input">Get Skills</a></li>
+      <li><a href="/history">History</a></li>
+      <li><a href="/profile">Profile</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="nav-controls">
+        <select class="font-select" id="font-select">
+          <option value="font-inter">Inter</option>
+          <option value="font-serif">Serif</option>
+          <option value="font-mono">Mono</option>
+        </select>
+        <button class="icon-btn" id="theme-toggle">🌙</button>
+      </div>
+      <span class="user-badge">👤 {{ session['user'] }}</span>
+      <a href="/logout" class="btn btn-danger" style="padding: 0.4rem 1rem; font-size: 0.8rem;">Logout</a>
+    </div>
+  </nav>
+
+  <div class="page">
+    <h1 class="page-title">Your Profile</h1>
+    <p class="page-subtitle">Manage your personal info and track your progress.</p>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <div class="flash">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <!-- STATS -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-number">{{ total_sessions }}</div>
+        <div class="stat-label">Total Sessions</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">{{ session['user'][0].upper() }}</div>
+        <div class="stat-label">Username Initial</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">{{ profile['updated_at'] if profile and profile['updated_at'] else 'N/A' }}</div>
+        <div class="stat-label">Last Updated</div>
+      </div>
+    </div>
+
+    <!-- PROFILE INFO -->
+    <div class="history-card" style="margin-top: 2rem;">
+      <h3>Personal Info</h3>
+      <form method="POST" action="/profile/edit">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" name="full_name" placeholder="Your full name"
+            value="{{ profile['full_name'] if profile and profile['full_name'] else '' }}">
+        </div>
+        <div class="form-group">
+          <label>Bio</label>
+          <textarea name="bio" placeholder="Tell us about yourself...">{{ profile['bio'] if profile and profile['bio'] else '' }}</textarea>
+        </div>
+        <div class="form-group">
+          <label>Interests</label>
+          <input type="text" name="interests" placeholder="e.g. Cricket, Drawing, Gaming"
+            value="{{ profile['interests'] if profile and profile['interests'] else '' }}">
+        </div>
+        <div class="form-group">
+          <label>LinkedIn URL</label>
+          <input type="text" name="linkedin" placeholder="https://linkedin.com/in/yourname"
+            value="{{ profile['linkedin'] if profile and profile['linkedin'] else '' }}">
+        </div>
+        <div class="form-group">
+          <label>GitHub URL</label>
+          <input type="text" name="github" placeholder="https://github.com/yourname"
+            value="{{ profile['github'] if profile and profile['github'] else '' }}">
+        </div>
+        <button type="submit" class="btn">Save Profile →</button>
+      </form>
+    </div>
+
+    <!-- SOCIAL LINKS -->
+    {% if profile and (profile['linkedin'] or profile['github']) %}
+      <div class="history-card" style="margin-top: 1.5rem;">
+        <h3>Your Links</h3>
+        <div style="display: flex; gap: 1rem; margin-top: 0.5rem;">
+          {% if profile['linkedin'] %}
+            <a href="{{ profile['linkedin'] }}" target="_blank" class="skill-link">🔗 LinkedIn →</a>
+          {% endif %}
+          {% if profile['github'] %}
+            <a href="{{ profile['github'] }}" target="_blank" class="skill-link">🐙 GitHub →</a>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+
+  </div>
+
+  <footer>
+    Built by Abhinav Kaushik &nbsp;·&nbsp; Powered by LLaMA 3.1 + Flask
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

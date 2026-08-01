@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register — SkillSpark</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/" class="logo">Skill<span>Spark</span></a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/input">Get Skills</a></li>
+      <li><a href="/history">History</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="nav-controls">
+        <select class="font-select" id="font-select">
+          <option value="font-inter">Inter</option>
+          <option value="font-serif">Serif</option>
+          <option value="font-mono">Mono</option>
+        </select>
+        <button class="icon-btn" id="theme-toggle">🌙</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="auth-box">
+    <h1>Create account</h1>
+    <p>Join SkillSpark and discover your potential</p>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <div class="flash">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="/register">
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" name="username" placeholder="Choose a username" required>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" name="password" placeholder="Choose a password" required>
+      </div>
+      <button type="submit" class="btn" style="width: 100%;">Create Account →</button>
+      <div class="loader">
+        <div class="spinner"></div>
+        Creating account...
+      </div>
+    </form>
+
+    <span class="auth-link">
+      Already have an account? <a href="/login">Login</a>
+    </span>
+  </div>
+
+  <footer>
+    Built by Abhinav Kaushik &nbsp;·&nbsp; Powered by LLaMA 3.1 + Flask
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

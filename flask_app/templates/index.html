@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SkillSpark — Ignite Your Potential</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/" class="logo">Skill<span>Spark</span></a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/input">Get Skills</a></li>
+      <li><a href="/history">History</a></li>
+      <li><a href="/profile">Profile</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="nav-controls">
+        <select class="font-select" id="font-select">
+          <option value="font-inter">Inter</option>
+          <option value="font-serif">Serif</option>
+          <option value="font-mono">Mono</option>
+        </select>
+        <button class="icon-btn" id="theme-toggle">🌙</button>
+      </div>
+      {% if session.get('user') %}
+        <span class="user-badge">👤 {{ session['user'] }}</span>
+        <a href="/logout" class="btn btn-danger" style="padding: 0.4rem 1rem; font-size: 0.8rem;">Logout</a>
+      {% else %}
+        <a href="/login" class="btn btn-outline" style="padding: 0.4rem 1rem; font-size: 0.8rem; margin-left: 0;">Login</a>
+      {% endif %}
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">AI-Powered Skill Discovery</div>
+      <h1>Turn your hobbies into <span class="highlight">career skills</span></h1>
+      <p>Tell us what you love doing. Our AI maps your passions to real, in-demand skills — with resources to start today.</p>
+      <div>
+        <a href="/input" class="btn">Find My Skills</a>
+        <a href="/history" class="btn btn-outline">View History</a>
+        
+      </div>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="feature-card">
+      <div class="icon">📝</div>
+      <h3>Enter Your Hobbies</h3>
+      <p>Tell us what you enjoy — cricket, drawing, gaming, anything.</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">🤖</div>
+      <h3>AI Analyzes</h3>
+      <p>LLaMA 3.1 finds skills that connect your passions to real opportunities.</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">🎓</div>
+      <h3>Start Learning</h3>
+      <p>Get curated resources and a clear path to build each skill.</p>
+    </div>
+  </section>
+
+  <footer>
+    Built by Abhinav Kaushik &nbsp;·&nbsp; Powered by LLaMA 3.1 + Flask
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Skills — SkillSpark</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/" class="logo">Skill<span>Spark</span></a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/input">Get Skills</a></li>
+      <li><a href="/history">History</a></li>
+      <li><a href="/profile">Profile</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="nav-controls">
+        <select class="font-select" id="font-select">
+          <option value="font-inter">Inter</option>
+          <option value="font-serif">Serif</option>
+          <option value="font-mono">Mono</option>
+        </select>
+        <button class="icon-btn" id="theme-toggle">🌙</button>
+      </div>
+      <span class="user-badge">👤 {{ session['user'] }}</span>
+      <a href="/logout" class="btn btn-danger" style="padding: 0.4rem 1rem; font-size: 0.8rem;">Logout</a>
+    </div>
+  </nav>
+
+  <div class="page">
+    <h1 class="page-title">Your skill map</h1>
+    <p class="page-subtitle">Based on your hobbies and goals, here's what you should build next.</p>
+
+    {% if result %}
+      <div class="result-meta">
+        <span class="tag">📝 {{ hobbies }}</span>
+        <span class="tag">📊 {{ level }}</span>
+        <span class="tag">🎯 {{ goal }}</span>
+      </div>
+
+      <div class="skills-container">
+        {% set skills = result.split('SKILL:') %}
+        {% for skill in skills %}
+          {% if skill.strip() %}
+            {% set lines = skill.strip().split('\n') %}
+            <div class="skill-card">
+              <div class="skill-header">
+                <span class="skill-number">{{ loop.index }}</span>
+                <h3 class="skill-name">{{ lines[0].strip() }}</h3>
+              </div>
+              {% for line in lines[1:] %}
+                {% if line.startswith('WHY:') %}
+                  <p class="skill-why">{{ line[4:].strip() }}</p>
+                {% elif line.startswith('RESOURCE:') %}
+                  {% set resource = line[9:].strip() %}
+                  {% if ' - ' in resource %}
+                    {% set parts = resource.split(' - ') %}
+                    <a href="{{ parts[1].strip() }}" target="_blank" class="skill-link">
+                      🔗 {{ parts[0].strip() }} →
+                    </a>
+                  {% else %}
+                    <p class="skill-why">{{ resource }}</p>
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      <div style="margin-top: 1.5rem; display: flex; gap: 0.75rem;">
+        <a href="/input" class="btn">Try Again</a>
+        <a href="/history" class="btn btn-outline">View History</a>
+      </div>
+
+    {% else %}
+      <div class="empty-state">
+        <div class="icon">🎯</div>
+        <h3>No results yet</h3>
+        <p>Go back and enter your hobbies to get AI-powered skill recommendations.</p>
+        <a href="/input" class="btn">Get Started</a>
+      </div>
+    {% endif %}
+  </div>
+
+  <footer>
+    Built by Abhinav Kaushik &nbsp;·&nbsp; Powered by LLaMA 3.1 + Flask
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
